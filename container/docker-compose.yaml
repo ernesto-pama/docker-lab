@@ -1,0 +1,34 @@
+version: '3.1'
+
+services:
+  reverse-proxy:
+    container_name: traefik
+    image: traefik:alpine
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - ./traefik.toml:/etc/traefik/traefik.toml
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.1.21
+  www:
+    image: 'ernestopama/www:latest'
+    container_name: www
+    volumes:
+      - ../:/app
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.3.21
+
+volumes:
+  www-data:
+    external: true
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16

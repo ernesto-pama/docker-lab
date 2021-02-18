@@ -7,7 +7,6 @@
 /public/bundles/
 /var/
 /vendor/
-container
-Makefile
 .idea/
+node_modules/
 ###< symfony/framework-bundle ###

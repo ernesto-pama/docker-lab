@@ -1,0 +1,38 @@
+defaultEntryPoints = ["http"]
+debug = true
+logLevel = "INFO"
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+  [entryPoints.api]
+  address = ":8080"
+
+[docker]
+  domain = "localhost"
+  endpoint = "unix:///var/run/docker.sock"
+  watch = true
+
+[api]
+  entryPoint = "api"
+
+[accesslog]
+  filePath = "/var/log/traefik/access.log"
+  bufferingSize = 100
+
+[file]
+  watch = true
+
+[frontends]
+  [frontends.www]
+  priority = 20
+  backend = "www_server"
+  passHostHeader = true
+    [frontends.www.routes]
+      [frontends.www.routes.www]
+      rule = "Host:localhost"
+
+[backends]
+  [backends.www_server]
+    [backends.www_server.servers]
+      [backends.www_server.servers.server1]
+      url = "http://10.5.3.21:80"
